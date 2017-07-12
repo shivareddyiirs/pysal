@@ -12,11 +12,12 @@ import os
 with open('README.rst') as file:
     long_description = file.read()
 
-MAJOR = 1
-MINOR = 13
-MICRO = 0
+MAJOR = 0
+MINOR = 0
+MICRO = '1a'
 ISRELEASED = False
-VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
+VERSION = '0.0.1a'
+#VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
 
 # BEFORE importing distutils, remove MANIFEST. distutils doesn't properly
@@ -38,10 +39,10 @@ def setup_package():
     # get all file endings and copy whole file names without a file suffix
     # assumes nested directories are only down one level
     example_data_files = set()
-    for i in os.listdir("pysal/examples"):
+    for i in os.listdir("pysal3/examples"):
         if i.endswith(('py', 'pyc')):
             continue
-        if not os.path.isdir("pysal/examples/" + i):
+        if not os.path.isdir("pysal3/examples/" + i):
             if "." in i:
                 glob_name = "examples/*." + i.split(".")[-1]
             else:
@@ -62,16 +63,16 @@ def setup_package():
     extras_reqs = reqs
 
     setup(
-        name='PySAL',
+        name='PySAL3',
         version=VERSION,
-        description="A library of spatial analysis functions.",
+        description="A library of spatial analysis functions, source converted to python 3",
         long_description=long_description,
         maintainer="PySAL Developers",
         maintainer_email='pysal-dev@googlegroups.com',
         url='http://pysal.org',
-        download_url='https://pypi.python.org/pypi/PySAL',
+        download_url='https://pypi.python.org/pypi/PySAL3',
         license='BSD',
-        py_modules=['pysal'],
+        py_modules=['pysal3'],
         test_suite='nose.collector',
         tests_require=['nose'],
         keywords='spatial statistics',
@@ -84,14 +85,13 @@ def setup_package():
             'Topic :: Scientific/Engineering :: GIS',
             'License :: OSI Approved :: BSD License',
             'Programming Language :: Python',
-            'Programming Language :: Python :: 2.5',
-            'Programming Language :: Python :: 2.6',
-            'Programming Language :: Python :: 2.7',
-            'Programming Language :: Python :: 3.4'
+            'Programming Language :: Python :: 3.4',
+            'Programming Language :: Python :: 3.5',
+            'Programming Language :: Python :: 3.6'
         ],
         packages=find_packages(exclude=[".meta", "*.meta.*", "meta.*",
                                         "meta"]),
-        package_data={'pysal': list(example_data_files)},
+        package_data={'pysal3': list(example_data_files)},
         install_requires=install_reqs,
         extras_require=extras_reqs,
         cmdclass={'build_py': build_py}
