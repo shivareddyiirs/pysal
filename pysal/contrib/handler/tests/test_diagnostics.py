@@ -26,7 +26,7 @@ class TestFStat(unittest.TestCase):
         obs = diagnostics.f_stat(reg)
         exp = (28.385629224695, 0.000000009341)
         for i in range(2):
-            self.assertAlmostEquals(obs[i],exp[i])
+            self.assertAlmostEqual(obs[i],exp[i])
 
 class TestTStat(unittest.TestCase):
     def test_t_stat(self):
@@ -36,19 +36,19 @@ class TestTStat(unittest.TestCase):
                (-2.6544086427176916, 0.010874504909754612)]
         for i in range(3):
             for j in range(2):
-                self.assertAlmostEquals(obs[i][j],exp[i][j])
+                self.assertAlmostEqual(obs[i][j],exp[i][j])
 
 class TestR2(unittest.TestCase):
     def test_r2(self):
         obs = diagnostics.r2(reg)
         exp = 0.55240404083742334
-        self.assertAlmostEquals(obs,exp)
+        self.assertAlmostEqual(obs,exp)
 
 class TestAr2(unittest.TestCase):
     def test_ar2(self):
         obs = diagnostics.ar2(reg)
         exp = 0.5329433469607896
-        self.assertAlmostEquals(obs,exp)
+        self.assertAlmostEqual(obs,exp)
 
 class TestSeBetas(unittest.TestCase):
     def test_se_betas(self):
@@ -60,57 +60,57 @@ class TestLogLikelihood(unittest.TestCase):
     def test_log_likelihood(self):
         obs = diagnostics.log_likelihood(reg)
         exp = -187.3772388121491
-        self.assertAlmostEquals(obs,exp)
+        self.assertAlmostEqual(obs,exp)
 
 class TestAkaike(unittest.TestCase):
     def test_akaike(self):
         obs = diagnostics.akaike(reg)
         exp = 380.7544776242982
-        self.assertAlmostEquals(obs,exp)
+        self.assertAlmostEqual(obs,exp)
 
 class TestSchwarz(unittest.TestCase):
     def test_schwarz(self):
         obs = diagnostics.schwarz(reg)
         exp = 386.42993851863008
-        self.assertAlmostEquals(obs,exp)
+        self.assertAlmostEqual(obs,exp)
 
 class TestConditionIndex(unittest.TestCase):
     def test_condition_index(self):
         obs = diagnostics.condition_index(reg)
         exp = 6.541827751444
-        self.assertAlmostEquals(obs,exp)
+        self.assertAlmostEqual(obs,exp)
 
 class TestJarqueBera(unittest.TestCase):
     def test_jarque_bera(self):
         obs = diagnostics.jarque_bera(reg)
         exp = {'df':2, 'jb':1.835752520076, 'pvalue':0.399366291249}
-        self.assertEquals(obs['df'],exp['df'])
-        self.assertAlmostEquals(obs['jb'],exp['jb'])
-        self.assertAlmostEquals(obs['pvalue'],exp['pvalue'])
+        self.assertEqual(obs['df'],exp['df'])
+        self.assertAlmostEqual(obs['jb'],exp['jb'])
+        self.assertAlmostEqual(obs['pvalue'],exp['pvalue'])
 
 class TestBreuschPagan(unittest.TestCase):
     def test_breusch_pagan(self):
         obs = diagnostics.breusch_pagan(reg)
         exp = {'df':2, 'bp':7.900441675960, 'pvalue':0.019250450075}
-        self.assertEquals(obs['df'],exp['df'])
-        self.assertAlmostEquals(obs['bp'],exp['bp'])
-        self.assertAlmostEquals(obs['pvalue'],exp['pvalue'])
+        self.assertEqual(obs['df'],exp['df'])
+        self.assertAlmostEqual(obs['bp'],exp['bp'])
+        self.assertAlmostEqual(obs['pvalue'],exp['pvalue'])
 
 class TestWhite(unittest.TestCase):
     def test_white(self):
         obs = diagnostics.white(reg)
         exp = {'df':5, 'wh':19.946008239903, 'pvalue':0.001279222817}
-        self.assertEquals(obs['df'],exp['df'])
-        self.assertAlmostEquals(obs['wh'],exp['wh'])
-        self.assertAlmostEquals(obs['pvalue'],exp['pvalue'])
+        self.assertEqual(obs['df'],exp['df'])
+        self.assertAlmostEqual(obs['wh'],exp['wh'])
+        self.assertAlmostEqual(obs['pvalue'],exp['pvalue'])
 
 class TestKoenkerBassett(unittest.TestCase):
     def test_koenker_bassett(self):
         obs = diagnostics.koenker_bassett(reg)
         exp = {'df':2, 'kb':5.694087931707, 'pvalue':0.058015563638}
-        self.assertEquals(obs['df'],exp['df'])
-        self.assertAlmostEquals(obs['kb'],exp['kb'])
-        self.assertAlmostEquals(obs['pvalue'],exp['pvalue'])
+        self.assertEqual(obs['df'],exp['df'])
+        self.assertAlmostEqual(obs['kb'],exp['kb'])
+        self.assertAlmostEqual(obs['pvalue'],exp['pvalue'])
 
 class TestVif(unittest.TestCase):
     def test_vif(self):
@@ -120,13 +120,13 @@ class TestVif(unittest.TestCase):
                (1.3331174971891973, 0.75012142748740707)]
         for i in range(1,3):
             for j in range(2):
-                self.assertAlmostEquals(obs[i][j],exp[i][j])
+                self.assertAlmostEqual(obs[i][j],exp[i][j])
 
 class TestConstantCheck(unittest.TestCase):
     def test_constant_check(self):
         obs = diagnostics.constant_check(reg.x)
         exp = True
-        self.assertEquals(obs,exp)
+        self.assertEqual(obs,exp)
 
 
 if __name__ == '__main__':

@@ -9,7 +9,7 @@ Author(s):
 
 __author__ = "Luc Anselin <luc.anselin@asu.edu, Xun Li <xun.li@asu.edu"
 
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import json
 from pysal.cg import lonlat,geogrid,harcdist
 
@@ -34,7 +34,7 @@ def querypoints(p,bbox=True,lonx=False,k=5):
     """
     if bbox:
         if not len(p)==2:
-            raise Exception, "invalid format for bounding box"
+            raise Exception("invalid format for bounding box")
         # create grid points from bounding box
         grid = geogrid(p[0],p[1],k=k,lonx=lonx)
         # the list must be in lat-lon format
@@ -129,15 +129,15 @@ def googlepoints(querypoints,apikey,sradius,stype,newid=True,verbose=True):
     findings = {}
     
     for url in query_urls:
-        rsp = urllib2.urlopen(url)
+        rsp = urllib.request.urlopen(url)
         content = rsp.read()
         data = json.loads(content)
         if 'results' in data:         # avoid empty records
             results = data['results']
             if verbose:
-                print data['status'], len(results)
+                print(data['status'], len(results))
             if len(results) == 200:
-                print "WARNING: query truncated at 200"
+                print("WARNING: query truncated at 200")
             for item in results:
                 place_id = item['place_id']
                 loc = item['geometry']['location']
@@ -148,7 +148,7 @@ def googlepoints(querypoints,apikey,sradius,stype,newid=True,verbose=True):
     if newid:
         ii = 0
         newdict = {}
-        for placeid in findings.keys():
+        for placeid in list(findings.keys()):
             dd = findings[placeid]
             dd['placeid']=placeid  
             newdict[ii]=dd
@@ -189,7 +189,7 @@ def ptdict2geojson(d,location=["lng","lat"],values=[],ofile="output.geojson"):
     # initialize geo dictionary for point features
     geo = {"type": "FeatureCollection","features":[]}
     # loop over dictionary
-    for id,loc in d.iteritems():
+    for id,loc in d.items():
         feature = { "type" : "Feature", 
         "geometry": { "type": "Point", "coordinates": [ loc['lng'],loc['lat']]}}
         properties = {"id": id}
@@ -243,22 +243,22 @@ def googlept(pointlist,stype,apikey,lonx=False,bbox=True,k=5,sradius=5000,verbos
     return
     
 if __name__ == '__main__':
-    print "Welcome to PySAL Google Points Query"
-    apikey = raw_input("Enter your API key: ")
-    stype = raw_input("Enter the type of query: ")
-    print "For each query point, enter the lat,lon separated by a comma"
-    print "For a bounding box, enter the upper left corner first,\nthen the lower right"
+    print("Welcome to PySAL Google Points Query")
+    apikey = input("Enter your API key: ")
+    stype = input("Enter the type of query: ")
+    print("For each query point, enter the lat,lon separated by a comma")
+    print("For a bounding box, enter the upper left corner first,\nthen the lower right")
     plist = []
     while True:
-        p = raw_input("Enter lat,lon: ")
+        p = input("Enter lat,lon: ")
         if p:
             pp = tuple(map(float,p.split(",")))
-            print pp
+            print(pp)
             plist.append(pp)
         else:
             break
     if len(plist) == 2:
-        bb = raw_input("Is this a bounding box (enter Yes or No): ")
+        bb = input("Is this a bounding box (enter Yes or No): ")
         if bb.upper() == 'NO' or bb.upper() == 'N':
             bbox = False
         else:
@@ -268,18 +268,18 @@ if __name__ == '__main__':
     k = 5
     sr = 5000.0
     if bbox:
-        gp = raw_input("Enter the number of grid points or return for default: ")
+        gp = input("Enter the number of grid points or return for default: ")
         if gp:
             k = int(gp)
     else:
-        sr = raw_input("Enter the search radius in meters\nor return for default: ")
+        sr = input("Enter the search radius in meters\nor return for default: ")
         if sr:
             sradius = float(sr)
     
-    outfile = raw_input("Enter the name for the output file : ")
+    outfile = input("Enter the name for the output file : ")
     googlept(plist,stype,apikey,lonx=False,bbox=bbox,k=k,sradius=sr,
           verbose=True,ofile=outfile)
-    print "Output is in file %s " % outfile
+    print("Output is in file %s " % outfile)
     
     
         

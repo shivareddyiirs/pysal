@@ -39,7 +39,7 @@ class TemplateWriter(FileIO):
 
         # it's up to the writer to understand the object, you should check that object is of the type you expect and raise a TypeError is its now.
         # we will support writing string objects in this example, all string are derived from basestring...
-        if issubclass(type(obj), basestring):
+        if issubclass(type(obj), str):
 
             #Non-essential ...
             def foobar(c):
@@ -47,7 +47,7 @@ class TemplateWriter(FileIO):
                     return True
                 else:
                     return False
-            result = filter(foobar, obj)  # e.g.   'foobara' == filter(foobar,'my little foobar example')
+            result = list(filter(foobar, obj))  # e.g.   'foobara' == filter(foobar,'my little foobar example')
 
             #do the actual writing...
             self.fileObj.write(result + '\n')
@@ -84,7 +84,7 @@ class TemplateReaderWriter(FileIO):
                 return True
             else:
                 return False
-        return filter(foobar, st)  # e.g.   'foobara' == filter(foobar,'my little foobar example')
+        return list(filter(foobar, st))  # e.g.   'foobara' == filter(foobar,'my little foobar example')
 
     def _read(self):
         """ the _read method should return only ONE object and raise StopIteration at the EOF."""
@@ -99,7 +99,7 @@ class TemplateReaderWriter(FileIO):
     def write(self, obj):
         """ .write method of the 'foobar' template, receives an obj """
         self._complain_ifclosed(self.closed)
-        if issubclass(type(obj), basestring):
+        if issubclass(type(obj), str):
             result = self._filter(obj)
             self.fileObj.write(result + '\n')
             self.pos += 1
@@ -137,9 +137,9 @@ if __name__ == '__main__':
     f = pysal.open('test.bar', 'r')
     s = ''.join(f.read())
     f.close()
-    print s
+    print(s)
 
     f = open('test.foo', 'r')
     s2 = f.read()
     f.close()
-    print s == s2
+    print(s == s2)

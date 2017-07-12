@@ -1,6 +1,6 @@
 import pysal
 import os.path
-import gwt
+from . import gwt
 from pysal.weights import W
 from pysal.weights.util import remap_ids
 from warnings import warn

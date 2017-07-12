@@ -205,7 +205,7 @@ def adjl2w(adjacency_list, nodetype=str):
 
     """
 
-    adjacency_list = [ map(nodetype, neighs) for neighs in adjacency_list]
+    adjacency_list = [ list(map(nodetype, neighs)) for neighs in adjacency_list]
     return ps.W(dict([(nodetype(i),neighs) for i,neighs in enumerate(adjacency_list)]))
 
                        

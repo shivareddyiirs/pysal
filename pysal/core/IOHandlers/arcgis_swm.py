@@ -57,7 +57,7 @@ class ArcGISSwmIO(FileIO.FileIO):
         self.file = open(self.dataPath, self.mode + 'b')
 
     def _set_varName(self, val):
-        if issubclass(type(val), basestring):
+        if issubclass(type(val), str):
             self._varName = val
 
     def _get_varName(self):
@@ -66,7 +66,7 @@ class ArcGISSwmIO(FileIO.FileIO):
     varName = property(fget=_get_varName, fset=_set_varName)
 
     def _set_srs(self, val):
-        if issubclass(type(val), basestring):
+        if issubclass(type(val), str):
             self._srs = val
 
     def _get_srs(self):
@@ -138,7 +138,7 @@ class ArcGISSwmIO(FileIO.FileIO):
         no_obs, row_std = tuple(unpack('<2l', self.file.read(8)))
         neighbors = {}
         weights = {}
-        for i in xrange(no_obs):
+        for i in range(no_obs):
             origin, no_nghs = tuple(unpack('<2l', self.file.read(8)))
             neighbors[origin] = []
             weights[origin] = []
@@ -177,7 +177,7 @@ class ArcGISSwmIO(FileIO.FileIO):
 
         neighbors = {}
         weights = {}
-        for i in xrange(no_obs):
+        for i in range(no_obs):
             origin, no_nghs = tuple(unpack('<2l', self.file.read(8)))
             neighbors[origin] = []
             weights[origin] = []

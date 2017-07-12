@@ -1,15 +1,15 @@
 from collections import defaultdict, OrderedDict
 import math
 import os
-import cPickle
+import pickle
 import copy
 
 import numpy as np
 import pysal as ps
 from pysal.weights.util import get_ids
 
-from analysis import NetworkG, NetworkK, NetworkF
-import util
+from .analysis import NetworkG, NetworkK, NetworkF
+from . import util
 
 __all__ = ["Network", "PointPattern", "NetworkG", "NetworkK", "NetworkF"]
 
@@ -103,7 +103,7 @@ class Network:
             self.pointpatterns = {}
 
             self._extractnetwork()
-            self.node_coords = dict((value, key) for key, value in self.nodes.iteritems())
+            self.node_coords = dict((value, key) for key, value in self.nodes.items())
 
             # This is a spatial representation of the network.
             self.edges = sorted(self.edges)
@@ -162,7 +162,7 @@ class Network:
         if self.unique_segs == True:
             # Remove duplicate edges and duplicate adjacent nodes.
             self.edges = list(set(self.edges))
-            for k, v in self.adjacencylist.iteritems():
+            for k, v in self.adjacencylist.items():
                 self.adjacencylist[k] = list(set(v))
 
     def extractgraph(self):
@@ -177,7 +177,7 @@ class Network:
 
         # Find all nodes with cardinality 2.
         segment_nodes = []
-        for k, v in self.adjacencylist.iteritems():
+        for k, v in self.adjacencylist.items():
             #len(v) == 1 #cul-de-sac
             #len(v) == 2 #bridge segment
             #len(v) > 2 #intersection
@@ -234,7 +234,7 @@ class Network:
                             redundant.add(tuple(sorted([b,n])))
 
                 newedge = tuple(sorted(startend.values()))
-                for k, v in startend.iteritems():
+                for k, v in startend.items():
                     redundant.add(tuple(sorted([k,v])))
 
                 for r in redundant:
@@ -455,12 +455,12 @@ class Network:
 
         points = {}
         p2id = {}
-        for pointIdx, point in pointpattern.points.iteritems(): 
+        for pointIdx, point in pointpattern.points.items(): 
             points[pointIdx] = point['coordinates']
 
         snapped = util.snapPointsOnSegments(points, segments)
 
-        for pointIdx, snapInfo in snapped.iteritems():
+        for pointIdx, snapInfo in snapped.items():
             x,y = snapInfo[1].tolist()
             edge = s2e[tuple(snapInfo[0])]
             if edge not in obs_to_edge:
@@ -471,8 +471,8 @@ class Network:
             dist_to_node[pointIdx] = {edge[0]:d1, edge[1]:d2}
 
         obs_to_node = defaultdict(list)
-        for k, v in obs_to_edge.iteritems():
-            keys = v.keys()
+        for k, v in obs_to_edge.items():
+            keys = list(v.keys())
             obs_to_node[k[0]] = keys
             obs_to_node[k[1]] = keys
 
@@ -510,16 +510,16 @@ class Network:
         """
         counts = {}
         if graph:
-            for key, observations in obs_on_network.iteritems():
+            for key, observations in obs_on_network.items():
                 cnt = len(observations)
-                if key in self.graph_to_edges.keys():
+                if key in list(self.graph_to_edges.keys()):
                     key = self.graph_to_edges[key]
                 try:
                     counts[key] += cnt
                 except:
                     counts[key] = cnt
         else:
-            for key in obs_on_network.iterkeys():
+            for key in obs_on_network.keys():
                 counts[key] = len(obs_on_network[key])
         return counts
 
@@ -582,7 +582,7 @@ class Network:
         #   Cumulative Network Length.
         edges = []
         lengths = np.zeros(len(self.edge_lengths))
-        for i, key in enumerate(self.edge_lengths.iterkeys()):
+        for i, key in enumerate(self.edge_lengths.keys()):
             edges.append(key)
             lengths[i] = self.edge_lengths[key]
         stops = np.cumsum(lengths)
@@ -659,9 +659,9 @@ class Network:
             else:
                 cores = n_processes
             p = mp.Pool(processes=cores)
-            distance_pred = p.map(util.dijkstra_multi, zip(repeat(self), 
+            distance_pred = p.map(util.dijkstra_multi, list(zip(repeat(self), 
                                                        repeat(self.edge_time), 
-                                                       self.node_list))
+                                                       self.node_list)))
             distance = [distance_pred[iteration][0] for iteration in range(len(distance_pred))]
             pred = [distance_pred[iteration][1] for iteration in range(len(distance_pred))]
             pred = np.array(pred)
@@ -703,12 +703,12 @@ class Network:
             self.node_distance_matrix(n_processes)
             
         # Source setup
-        src_indices = sourcepattern.points.keys()
+        src_indices = list(sourcepattern.points.keys())
         nsource_pts = len(src_indices)
         src_dist_to_node = sourcepattern.dist_to_node
         src_nodes = {}
         for s in src_indices:
-            e1, e2 = src_dist_to_node[s].keys()
+            e1, e2 = list(src_dist_to_node[s].keys())
             src_nodes[s] = (e1, e2)
 
         # Destination setup
@@ -716,13 +716,13 @@ class Network:
         if destpattern is None:
             symmetric = True
             destpattern = sourcepattern
-        dest_indices = destpattern.points.keys()
+        dest_indices = list(destpattern.points.keys())
         ndest_pts = len(dest_indices)
         dest_dist_to_node = destpattern.dist_to_node
         dest_searchpts = copy.deepcopy(dest_indices)
         dest_nodes = {}
         for s in dest_indices:
-            e1, e2 = dest_dist_to_node[s].keys()
+            e1, e2 = list(dest_dist_to_node[s].keys())
             dest_nodes[s] = (e1, e2)
         
         # Output setup
@@ -734,7 +734,7 @@ class Network:
             source1, source2 = src_nodes[p1]
             set1 = set(src_nodes[p1])
             # Distance from node1 to p, distance from node2 to p.
-            sdist1, sdist2 = src_dist_to_node[p1].values()
+            sdist1, sdist2 = list(src_dist_to_node[p1].values())
 
             if symmetric:
                 # Only compute the upper triangle if symmetric.
@@ -749,7 +749,7 @@ class Network:
                     nearest[p1,p2] = computed_length
 
                 else:
-                    ddist1, ddist2 = dest_dist_to_node[p2].values()
+                    ddist1, ddist2 = list(dest_dist_to_node[p2].values())
                     d11 = self.alldistances[source1][0][dest1]
                     d21 = self.alldistances[source2][0][dest1]
                     d12 = self.alldistances[source1][0][dest2]
@@ -817,13 +817,13 @@ class Network:
                         column [:,1] containing the distance.
         """
 
-        if not sourcepattern in self.pointpatterns.keys():
-            raise KeyError("Available point patterns are {}".format(self.pointpatterns.keys()))
+        if not sourcepattern in list(self.pointpatterns.keys()):
+            raise KeyError("Available point patterns are {}".format(list(self.pointpatterns.keys())))
 
         if not hasattr(self,'alldistances'):
             self.node_distance_matrix(n_processes)
 
-        pt_indices = self.pointpatterns[sourcepattern].points.keys()
+        pt_indices = list(self.pointpatterns[sourcepattern].points.keys())
         dist_to_node = self.pointpatterns[sourcepattern].dist_to_node
         nearest = np.zeros((len(pt_indices), 2), dtype=np.float32)
         nearest[:,1] = np.inf
@@ -835,18 +835,18 @@ class Network:
 
         searchnodes = {}
         for s in searchpts:
-            e1, e2 = dist_to_node[s].keys()
+            e1, e2 = list(dist_to_node[s].keys())
             searchnodes[s] = (e1, e2)
 
         for p1 in pt_indices:
             # Get the source nodes and dist to source nodes.
             source1, source2 = searchnodes[p1]
-            sdist1, sdist2 = dist_to_node[p1].values()
+            sdist1, sdist2 = list(dist_to_node[p1].values())
 
             searchpts.remove(p1)
             for p2 in searchpts:
                 dest1, dest2 = searchnodes[p2]
-                ddist1, ddist2 = dist_to_node[p2].values()
+                ddist1, ddist2 = list(dist_to_node[p2].values())
                 source1_to_dest1 = sdist1 + self.alldistances[source1][0][dest1] + ddist1
                 source1_to_dest2 = sdist1 + self.alldistances[source1][0][dest2] + ddist2
                 source2_to_dest1 = sdist2 + self.alldistances[source2][0][dest1] + ddist1
@@ -1108,7 +1108,7 @@ class Network:
         sn.edges.difference_update(removeedges)
         sn.edges = list(sn.edges)
         # Update the point pattern snapping.
-        for instance in sn.pointpatterns.itervalues():
+        for instance in sn.pointpatterns.values():
             sn._snap_to_edge(instance)
 
         return sn
@@ -1129,12 +1129,12 @@ class Network:
         >>> ntw.savenetwork('mynetwork.pkl')
         """
         with open(filename, 'wb') as networkout:
-            cPickle.dump(self, networkout, protocol=2)
+            pickle.dump(self, networkout, protocol=2)
 
     @staticmethod
     def loadnetwork(filename):
         with open(filename, 'rb') as networkin:
-            self = cPickle.load(networkin)
+            self = pickle.load(networkin)
 
         return self
 
@@ -1201,7 +1201,7 @@ class PointPattern():
         pts.close()
         if db:
             db.close()
-        self.npoints = len(self.points.keys())
+        self.npoints = len(list(self.points.keys()))
 
 
 class SimulatedPointPattern():

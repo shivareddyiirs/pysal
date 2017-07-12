@@ -1,4 +1,4 @@
-from __future__ import division
+
 import unittest
 
 import numpy as np
@@ -18,7 +18,7 @@ class TestNetwork(unittest.TestCase):
         self.assertEqual(len(self.ntw.edges), 303)
         self.assertEqual(len(self.ntw.nodes), 230)
 
-        edgelengths = self.ntw.edge_lengths.values()
+        edgelengths = list(self.ntw.edge_lengths.values())
         self.assertAlmostEqual(sum(edgelengths), 104414.0920159, places=5)
 
 
@@ -76,13 +76,13 @@ class TestNetworkPointPattern(unittest.TestCase):
     def test_count_per_edge(self):
         counts = self.ntw.count_per_edge(self.ntw.pointpatterns['crimes'].obs_to_edge,
                                          graph=False)
-        meancounts = sum(counts.values()) / float(len(counts.keys()))
+        meancounts = sum(counts.values()) / float(len(list(counts.keys())))
         self.assertAlmostEqual(meancounts, 2.682242, places=5)
 
     def test_count_per_graph_edge(self):
         counts = self.ntw.count_per_edge(self.ntw.pointpatterns['crimes'].obs_to_edge,
                                          graph=True)
-        meancounts = sum(counts.values()) / float(len(counts.keys()))
+        meancounts = sum(counts.values()) / float(len(list(counts.keys())))
         self.assertAlmostEqual(meancounts, 3.29885, places=5)
 
     def test_simulate_normal_observations(self):
@@ -97,7 +97,7 @@ class TestNetworkPointPattern(unittest.TestCase):
         distancematrix_1 = self.ntw.allneighbordistances(self.schools)
         self.assertAlmostEqual(np.nansum(distancematrix_1[0]), 17682.436988, places=4)
 
-        for k, (distances, predlist) in self.ntw.alldistances.iteritems():
+        for k, (distances, predlist) in self.ntw.alldistances.items():
             self.assertEqual(distances[k], 0)
 
             #  turning off the tests associated with util.generatetree() for now,

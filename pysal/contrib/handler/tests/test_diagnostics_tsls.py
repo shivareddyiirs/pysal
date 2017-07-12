@@ -52,19 +52,19 @@ class TestTStat(unittest.TestCase):
                (-1.9946891307832111, 0.052021795864651159)]
         for i in range(3):
             for j in range(2):
-                self.assertAlmostEquals(obs[i][j],exp[i][j])
+                self.assertAlmostEqual(obs[i][j],exp[i][j])
 
 class TestPr2Aspatial(unittest.TestCase):
     def test_pr2_aspatial(self):
         obs = diagnostics_tsls.pr2_aspatial(reg)
         exp = 0.2793613712817381
-        self.assertAlmostEquals(obs,exp)
+        self.assertAlmostEqual(obs,exp)
 
 class TestPr2Spatial(unittest.TestCase):
     def test_pr2_spatial(self):
         obs = diagnostics_tsls.pr2_spatial(regsp)
         exp = 0.29964855438065163
-        self.assertAlmostEquals(obs,exp)
+        self.assertAlmostEqual(obs,exp)
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 """network unittest"""
 import unittest
-import network as pynet
-import kfuncs
+from . import network as pynet
+from . import kfuncs
 
 class Kfuncs_Tester(unittest.TestCase):
 
@@ -25,7 +25,7 @@ class Kfuncs_Tester(unittest.TestCase):
                            4: {0.5: 0, 1.5: 20, 2.5: 30}, 
                            5: {0.5: 0, 1.5: 10, 2.5: 20}}
         kfunc_values = {}
-        for k, v in self.distances.items():
+        for k, v in list(self.distances.items()):
             kfunc_values[k] = kfuncs.kt_values((0.5,3.5,1.0),v,10)
         self.assertEqual(kfunc_values, expected_values)
 

@@ -37,7 +37,7 @@ def _find_bcs():
                 except:
                     pass
     ucs.update({k:v for k,v in diter(classes) if (
-                any([issubclass(v, bc) for bc in bcs.values()])
+                any([issubclass(v, bc) for bc in list(bcs.values())])
                 and (k not in bcs))
                 or k.endswith('Regimes')})
     return bcs, ucs

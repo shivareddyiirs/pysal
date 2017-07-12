@@ -7,8 +7,8 @@ __author__ = "Taylor Oshan Tayoshan@gmail.com"
 import numpy as np
 import numpy.linalg as la
 from scipy.stats import t
-from kernels import *
-from diagnostics import get_AIC, get_AICc, get_BIC
+from .kernels import *
+from .diagnostics import get_AIC, get_AICc, get_BIC
 import pysal.spreg.user_output as USER
 from pysal.contrib.glm.family import Gaussian, Binomial, Poisson
 from pysal.contrib.glm.glm import GLM, GLMResults

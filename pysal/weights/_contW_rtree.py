@@ -103,4 +103,4 @@ if __name__ == '__main__':
     shp = pysal.open(pysal.examples.get_path('10740.shp'), 'r')
     w = ContiguityWeights_rtree(shp, QUEEN)
     t1 = time.time()
-    print "Completed in: ", t1 - t0, "seconds using rtree"
+    print("Completed in: ", t1 - t0, "seconds using rtree")

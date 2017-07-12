@@ -1,7 +1,7 @@
 """network unittest"""
 import unittest
-import network as pynet
-import klincs 
+from . import network as pynet
+from . import klincs 
 import random
 random.seed(10)
 import pysal
@@ -10,7 +10,7 @@ import numpy as np
 class KLINCS_Tester(unittest.TestCase):
 
     def setUp(self):
-        self.population = range(5)
+        self.population = list(range(5))
         self.weights = [0.1, 0.25, 0.1, 0.2, 0.35]
         np.random.seed(10)
         self.network_file = 'streets.shp'
@@ -48,18 +48,18 @@ class KLINCS_Tester(unittest.TestCase):
                 return (g[0], g[1])
         srcs = [] 
         for i, rec in enumerate(src_file):
-            srcs.append([get_geom(rec), get_index(i, dbf.next())]) 
+            srcs.append([get_geom(rec), get_index(i, next(dbf))]) 
         src_file.close()
         return srcs 
 
     def test_WeightedRandomSampleGenerator(self):
         generator = klincs.WeightedRandomSampleGenerator(self.weights, self.population, 3)
-        sample = generator.next()
+        sample = next(generator)
         self.assertEqual(sample,[4, 0, 3])
 
     def test_RandomSampleGenerator(self):
         generator = klincs.RandomSampleGenerator(self.population, 3)
-        sample = generator.next()
+        sample = next(generator)
         self.assertEqual(sample,[2, 1, 3])
 
     def test_local_k(self):

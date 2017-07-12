@@ -194,7 +194,7 @@ def _resolve_ties(i,inty,vals,neighbors,method,w):
         ties = np.where(vals == vals.max())
         return np.random.choice(np.squeeze(ties))
     elif method.lower() == 'tryself':
-        vals[inty[w.id2i[i]]] += np.mean(neighbors.values())
+        vals[inty[w.id2i[i]]] += np.mean(list(neighbors.values()))
         return _resolve_ties(i,inty,vals,neighbors,'random', w)
     elif method.lower() == 'lowest':
         ties = np.where(vals == vals.max())

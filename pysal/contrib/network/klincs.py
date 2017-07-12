@@ -41,15 +41,15 @@ class WeightedRandomSampleGenerator(object):
         self.n = n
         self.norm = self.totals[-1]
 
-    def next(self):
+    def __next__(self):
         sample = []
-        for i in xrange(self.n):
+        for i in range(self.n):
             throw = np.random.rand()*self.norm
             sample.append(self.population[np.searchsorted(self.totals, throw)])
         return sample
 
     def __call__(self):
-        return self.next()
+        return next(self)
 
 class RandomSampleGenerator(object):
     """
@@ -64,11 +64,11 @@ class RandomSampleGenerator(object):
         self.population = population
         self.n = n
 
-    def next(self):
+    def __next__(self):
         return random.sample(self.population, self.n)
 
     def __call__(self):
-        return self.next()
+        return next(self)
 
 def local_k(network, events, refs, scale_set, cache=None):
     """
@@ -88,13 +88,13 @@ def local_k(network, events, refs, scale_set, cache=None):
     if cache: net_distances = cache
     for node in refs:
         node = node[1][0]
-        a_dest = network[node].keys()[0]
+        a_dest = list(network[node].keys())[0]
         node_proj = (node, a_dest, 0, network[node][a_dest])
         if node not in net_distances:
             net_distances[node] = pynet.dijkstras(network, node, scale_set[1])
         if a_dest not in net_distances:
             net_distances[a_dest] = pynet.dijkstras(network, node, scale_set[1])
-        distances = pynet.proj_distances_undirected(network, node_proj, events, scale_set[1], cache=net_distances).values()
+        distances = list(pynet.proj_distances_undirected(network, node_proj, events, scale_set[1], cache=net_distances).values())
         node2localK[node] = pykfuncs.kt_values(scale_set, distances, 1)
     return node2localK, net_distances
 
@@ -116,7 +116,7 @@ def simulate_local_k_01(args):
     #print 'simulated_local_k_01'
     simulator = pysim.Simulation(net_file)
     sims_outcomes = []
-    for sim in xrange(sims):
+    for sim in range(sims):
         points = simulator.getRandomPoints(n, projected=True)
         sim_events = []
         for edge in points:
@@ -136,8 +136,8 @@ def simulate_local_k_02(args):
 
     #print 'simulated_local_k_02'
     sims_outcomes = []
-    sampler = RandomSampleGenerator(refs, n).next
-    for sim in xrange(sims):
+    sampler = RandomSampleGenerator(refs, n).__next__
+    for sim in range(sims):
         sim_events = sampler()
         sim_localk = {}
         for node in refs:
@@ -192,8 +192,8 @@ def k_cluster(network, events, refs, scale_set, sims, sig=0.1, sim_network=None,
             sims_outcomes = simulate_local_k_02((sims, n, refs, scale_set, net_dists))
     elif multiprocessing and cpus >= 2:
         pool = multiprocessing.Pool(cpus)
-        sims_list = range(sims)
-        sims_list = map(len, [sims_list[i::cpus] for i in xrange(cpus)])
+        sims_list = list(range(sims))
+        sims_list = list(map(len, [sims_list[i::cpus] for i in range(cpus)]))
         partial_outcomes = None
         if sim_network:
              partial_outcomes = pool.map(simulate_local_k_01, 
@@ -220,7 +220,7 @@ def k_cluster(network, events, refs, scale_set, sims, sig=0.1, sim_network=None,
         lower_envelope[node] = {}
         upper_envelope[node] = {}
         localKs[node] = {}
-        for scale in node2localK[node].keys():
+        for scale in list(node2localK[node].keys()):
             local_outcomes = [sim[node][scale] for sim in sims_outcomes]
             local_outcomes.sort()
             obs = node2localK[node][scale]

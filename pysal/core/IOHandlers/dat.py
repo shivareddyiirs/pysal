@@ -1,6 +1,6 @@
 import pysal
 import os.path
-import gwt
+from . import gwt
 from pysal.weights import W
 from warnings import warn
 

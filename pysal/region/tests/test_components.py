@@ -9,13 +9,13 @@ class Test_Components(unittest.TestCase):
 
     def test_check_contiguity(self):
         result = pysal.region.check_contiguity(self.w, [0, 1, 2, 3, 4], 4)
-        self.assertEquals(result, True)
+        self.assertEqual(result, True)
         result = pysal.region.check_contiguity(self.w, [0, 1, 2, 3, 4], 3)
-        self.assertEquals(result, False)
+        self.assertEqual(result, False)
         result = pysal.region.check_contiguity(self.w, [0, 1, 2, 3, 4], 0)
-        self.assertEquals(result, True)
+        self.assertEqual(result, True)
         result = pysal.region.check_contiguity(self.w, [0, 1, 2, 3, 4], 1)
-        self.assertEquals(result, False)
+        self.assertEqual(result, False)
 
 
 suite = unittest.TestLoader().loadTestsFromTestCase(Test_Components)

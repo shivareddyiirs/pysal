@@ -4,6 +4,6 @@
 
 """
 
-from maxp import *
-from randomregion import *
-from components import *
+from .maxp import *
+from .randomregion import *
+from .components import *

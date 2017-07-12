@@ -51,7 +51,7 @@ class ContiguityWeightsLists:
                 items[vertex].add(offsets[i])
 
             shared_vertices = []
-            for item, location in items.iteritems():
+            for item, location in items.items():
                 if len(location) > 1:
                     shared_vertices.append(location)
 
@@ -76,7 +76,7 @@ class ContiguityWeightsLists:
                 items[item].add(offsets[i])
 
             shared_vertices = []
-            for item, location in items.iteritems():
+            for item, location in items.items():
                 if len(location) > 1:
                     shared_vertices.append(location)
 

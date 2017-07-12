@@ -1,7 +1,7 @@
 """network unittest"""
 import unittest
-import network as pynet
-import lincs 
+from . import network as pynet
+from . import lincs 
 import random
 random.seed(10)
 import pysal

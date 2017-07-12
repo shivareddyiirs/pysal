@@ -7,7 +7,7 @@ try:
     from pysal.weights._contW_rtree import ContiguityWeights_rtree, QUEEN, ROOK
 except ImportError:
     OK_TO_RUN = False
-    print "Cannot test rtree contiguity weights, rtree not installed"
+    print("Cannot test rtree contiguity weights, rtree not installed")
 
 
 class TestRtreeContiguityWeights(unittest.TestCase):
@@ -18,7 +18,7 @@ class TestRtreeContiguityWeights(unittest.TestCase):
         shpObj.close()
 
     def test_w_type(self):
-        self.assert_(isinstance(self.rtreeW, ContiguityWeights_rtree))
+        self.assertTrue(isinstance(self.rtreeW, ContiguityWeights_rtree))
 
     def test_QUEEN(self):
         self.assertEqual(QUEEN, 1)
@@ -27,8 +27,8 @@ class TestRtreeContiguityWeights(unittest.TestCase):
         self.assertEqual(ROOK, 2)
 
     def test_ContiguityWeights_rtree(self):
-        self.assert_(hasattr(self.rtreeW, 'w'))
-        self.assert_(issubclass(dict, type(self.rtreeW.w)))
+        self.assertTrue(hasattr(self.rtreeW, 'w'))
+        self.assertTrue(issubclass(dict, type(self.rtreeW.w)))
         self.assertEqual(len(self.rtreeW.w), 136)
 
     def test_nested_polygons(self):
@@ -40,7 +40,7 @@ class TestRtreeContiguityWeights(unittest.TestCase):
             pysal.examples.get_path('virginia.shp'), QUEEN, 'POLY_ID')
         # compare output.
         for key in geodaW.neighbors:
-            geoda_neighbors = map(int, geodaW.neighbors[key])
+            geoda_neighbors = list(map(int, geodaW.neighbors[key]))
             pysalr_neighbors = pysalWr.neighbors[int(key)]
             geoda_neighbors.sort()
             pysalr_neighbors.sort()
@@ -55,7 +55,7 @@ class TestRtreeContiguityWeights(unittest.TestCase):
             pysal.examples.get_path('rook31.shp'), ROOK, 'POLY_ID')
         # compare output.
         for key in geodaW.neighbors:
-            geoda_neighbors = map(int, geodaW.neighbors[key])
+            geoda_neighbors = list(map(int, geodaW.neighbors[key]))
             pysalr_neighbors = pysalWr.neighbors[int(key)]
             geoda_neighbors.sort()
             pysalr_neighbors.sort()
@@ -70,7 +70,7 @@ class TestRtreeContiguityWeights(unittest.TestCase):
             'stl_hom.shp'), ROOK, 'POLY_ID_OG')
         # compare output.
         for key in geodaW.neighbors:
-            geoda_neighbors = map(int, geodaW.neighbors[key])
+            geoda_neighbors = list(map(int, geodaW.neighbors[key]))
             pysalr_neighbors = pysalWr.neighbors[int(key)]
             geoda_neighbors.sort()
             pysalr_neighbors.sort()
@@ -85,7 +85,7 @@ class TestRtreeContiguityWeights(unittest.TestCase):
             'sacramentot2.shp'), ROOK, 'POLYID')
         # compare output.
         for key in geodaW.neighbors:
-            geoda_neighbors = map(int, geodaW.neighbors[key])
+            geoda_neighbors = list(map(int, geodaW.neighbors[key]))
             pysalr_neighbors = pysalWr.neighbors[int(key)]
             geoda_neighbors.sort()
             pysalr_neighbors.sort()
@@ -100,7 +100,7 @@ class TestRtreeContiguityWeights(unittest.TestCase):
             pysal.examples.get_path('virginia.shp'), ROOK, 'POLY_ID')
         # compare output.
         for key in geodaW.neighbors:
-            geoda_neighbors = map(int, geodaW.neighbors[key])
+            geoda_neighbors = list(map(int, geodaW.neighbors[key]))
             pysalr_neighbors = pysalWr.neighbors[int(key)]
             geoda_neighbors.sort()
             pysalr_neighbors.sort()

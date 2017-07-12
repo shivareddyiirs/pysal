@@ -201,14 +201,14 @@ def addGal2Layer(galfile, layer, contiguity='rook'):
     gal = ps.open(galfile).read().neighbors
     w = {}
     for key in gal:
-        w[int(key)] =  map(int, gal[key]) 
+        w[int(key)] =  list(map(int, gal[key])) 
     
     if contiguity.upper()== "ROOK":
         layer.Wrook = w
     elif contiguity.upper() == "QUEEN":
         layer.Wqueen = w
     else:
-        print 'Unsupported contiguity type: ', contiguity
+        print('Unsupported contiguity type: ', contiguity)
 
 def addRook2Layer(galfile, layer):
     """
@@ -266,7 +266,7 @@ def addArray2Layer(array, layer, names=None):
         
     for j,name in enumerate(names):
         v = {}
-        for i in xrange(n):
+        for i in range(n):
             v[i] = array[i,j]
         layer.addVariable([name], v)
 
@@ -307,7 +307,7 @@ def addW2Layer(w, layer, contiguity='rook'):
     elif contiguity.upper() == "QUEEN":
         layer.Wqueen = w.neighbors
     else:
-        print 'Unsupported contiguity type: ', contiguity
+        print('Unsupported contiguity type: ', contiguity)
     return None
 
 if __name__ == '__main__':

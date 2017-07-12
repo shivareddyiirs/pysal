@@ -1,1 +1,1 @@
-import ops
+from . import ops

@@ -38,11 +38,11 @@ class Simulation(object):
            and mark the locations of end points of each link
         '''
         self.nwCumPro = [0.0]
-        for e in self.G.keys():
+        for e in list(self.G.keys()):
             self.nwCumPro.append(self.nwCumPro[-1] + (self.G[e][0]/self.total_length))
                                                                         
         # self.nwCumProDict --> {edge_index:right_side_end_point_of_the_link_on_the_imaginary_line}
-        self.nwCumProDict = dict(zip(self.G.keys(), self.nwCumPro[1:])) 
+        self.nwCumProDict = dict(list(zip(list(self.G.keys()), self.nwCumPro[1:]))) 
         self.imaginaryLineGenerated = True
             
     def getRandomPoints(self, n, projected=False, toShp=False):   
@@ -63,7 +63,7 @@ class Simulation(object):
         # Assign the random numbers to the links on the network
         # Think nwCumPro as bins; get bin numbers for all random numbers
         randSet_to_bins=np.digitize(randSet,self.nwCumPro)
-        randSet_to_bins=zip(randSet_to_bins,randSet)
+        randSet_to_bins=list(zip(randSet_to_bins,randSet))
         randSet_to_bins.sort()
         # Determine geographic coordinates for each random number
         nwPtDict = {}

@@ -1,6 +1,6 @@
 """network unittest"""
 import unittest
-import network as pynet
+from . import network as pynet
 import random
 random.seed(10)
 import pysal
@@ -53,7 +53,7 @@ class Network_Tester(unittest.TestCase):
         stats = ['v', 'e', 'L', 'p', 'u', 'alpha', 'beta', 'emax', 'gamma', 'eta', 
                  'net_den', 'detour']
         values = pynet.net_global_stats(self.G, detour=True)
-        values = dict(zip(stats, values))
+        values = dict(list(zip(stats, values)))
         self.assertEqual(values['v'], 230)
         self.assertEqual(values['e'], 303)
         self.assertAlmostEqual(values['L'], 52207.04600797734, places=1)
@@ -63,7 +63,7 @@ class Network_Tester(unittest.TestCase):
         self.assertAlmostEqual(values['gamma'], 0.44298245614035087, places=2)
         self.assertAlmostEqual(values['detour'], 0.78002937059822186, places=4)
         for k in values:
-            print k, values[k]
+            print(k, values[k])
 
     def test_random_projs(self):
         random.seed(10)
@@ -77,14 +77,14 @@ class Network_Tester(unittest.TestCase):
         source = self.points[0]
         destinations = self.points[1:]
         distances = pynet.proj_distances_undirected(self.G2, source, destinations, r=1.0)
-        self.assertAlmostEqual(distances.values()[0], 0.59195370266245062)
+        self.assertAlmostEqual(list(distances.values())[0], 0.59195370266245062)
 
     def test_proj_distances_directed(self):
         source = self.points[0]
         destinations = self.points
         distances = pynet.proj_distances_directed(self.G2, source, destinations)
         distance_values = [0.0, 1.9626199714421757]
-        self.assertEqual(distances.values(), distance_values)
+        self.assertEqual(list(distances.values()), distance_values)
 
     def test_dijkstras(self):
         distances = pynet.dijkstras(self.G2, (1,1))

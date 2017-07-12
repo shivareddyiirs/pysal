@@ -201,7 +201,7 @@ def dist_weights(network, id2linkpoints, link2id, bandwidth):
         w : a distance-based, binary spatial weights matrix
         id2link: a dictionary that associates a unique id to each edge of the network
     """
-    linkpoints = id2linkpoints.values()
+    linkpoints = list(id2linkpoints.values())
     neighbors, id2link = {}, {}
     net_distances = {}
     for linkpoint in id2linkpoints:
@@ -214,7 +214,7 @@ def dist_weights(network, id2linkpoints, link2id, bandwidth):
             del ngh[linkpoints[linkpoint]]
         if linkpoint not in neighbors:
             neighbors[linkpoint] = []
-        for k in ngh.keys():
+        for k in list(ngh.keys()):
             neighbor = link2id[k[:2]]
             if neighbor not in neighbors[linkpoint]:
                 neighbors[linkpoint].append(neighbor)
@@ -263,7 +263,7 @@ def lincs(network, event, base, weight, dist=None, lisa_func='moran', sim_method
 
     """
     if lisa_func in ['g', 'g_star'] and weight == 'Node-based':
-        print 'Local G statistics can work only with distance-based weights matrix'
+        print('Local G statistics can work only with distance-based weights matrix')
         raise 
 
     if lisa_func == 'moran':
@@ -290,7 +290,7 @@ def lincs(network, event, base, weight, dist=None, lisa_func='moran', sim_method
             edges_geom.append(edges[edge][0])
             e[edge] = edges[edge][event]
             b[edge] = getBase(edges, edge, base)
-        w.id_order = edges.keys()
+        w.id_order = list(edges.keys())
     elif dist is not None:
         id2edgepoints, id2attr, edge2id = edgepoints_from_network(network, attribute=True)
         for n1 in network:
@@ -305,7 +305,7 @@ def lincs(network, event, base, weight, dist=None, lisa_func='moran', sim_method
             edges_geom.append(edges[edge])
             e[edge] = id2attr[edge][event - 1]
             b[edge] = getBase(id2attr, edge, base)
-        w.id_order = id2attr.keys()
+        w.id_order = list(id2attr.keys())
 
     Is, p_sim, Zs = None,None, None
     if sim_method == 'permutation':
@@ -344,6 +344,6 @@ def lincs(network, event, base, weight, dist=None, lisa_func='moran', sim_method
         p_sim = sim_res[0]
 
     w.transform = 'O'
-    return zip(edges_geom, e, b, Is, Zs, p_sim), w
+    return list(zip(edges_geom, e, b, Is, Zs, p_sim)), w
 
         

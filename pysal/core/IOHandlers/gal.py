@@ -2,6 +2,7 @@ import pysal.core.FileIO as FileIO
 from pysal.weights import W, WSP
 from scipy import sparse
 import numpy as np
+import collections
 
 __author__ = 'Charles R Schmidt <schmidtc@gmail.com>'
 __all__ = ['GalIO']
@@ -41,7 +42,7 @@ class GalIO(FileIO.FileIO):
         return self._typ
 
     def _set_data_type(self, typ):
-        if callable(typ):
+        if isinstance(typ, collections.Callable):
             self._typ = typ
         else:
             raise TypeError("Expecting a callable")
@@ -99,11 +100,11 @@ class GalIO(FileIO.FileIO):
             append = col.append
             counter = 0
             typ = self.data_type
-            for i in xrange(n):
+            for i in range(n):
                 id, n_neighbors = self.file.readline().strip().split()
                 id = typ(id)
                 n_neighbors = int(n_neighbors)
-                neighbors_i = map(typ, self.file.readline().strip().split())
+                neighbors_i = list(map(typ, self.file.readline().strip().split()))
                 nn = len(neighbors_i)
                 extend([id] * nn)
                 counter += nn
@@ -137,7 +138,7 @@ class GalIO(FileIO.FileIO):
                 id, n_neighbors = self.file.readline().strip().split()
                 id = typ(id)
                 n_neighbors = int(n_neighbors)
-                neighbors_i = map(typ, self.file.readline().strip().split())
+                neighbors_i = list(map(typ, self.file.readline().strip().split()))
                 neighbors[id] = neighbors_i
                 ids.append(id)
             self.pos += 1

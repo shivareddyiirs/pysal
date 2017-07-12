@@ -1,6 +1,6 @@
 import wx
 import pysal
-from transforms import WorldToViewTransform
+from .transforms import WorldToViewTransform
 
 __author__ = "Charles R Schmidt <schmidtc@gmail.com>"
 
@@ -15,10 +15,10 @@ class WeightsMapFrame(wx.Frame):
         wx.Frame.__init__(self,parent,size=size,style=style)
         self.Bind
         self.SetTitle("Weights Inspector")
-        if issubclass(type(geo),basestring):
+        if issubclass(type(geo),str):
             geo = pysal.open(geo,'r')
         self.geo = geo
-        if issubclass(type(w),basestring):
+        if issubclass(type(w),str):
             w = pysal.open(w,'r').read()
         self.w = w
         self.wm = WeightsMap(self,self.geo,self.w)
@@ -45,9 +45,9 @@ class WeightsMap(wx.Panel):
             self.drawfunc = self.drawpt
             self.locator = pysal.cg.PointLocator(geo)
         else:
-            raise TypeError, "Unsupported Type: %r"%(geo.type)
+            raise TypeError("Unsupported Type: %r"%(geo.type))
         self.w = w_obj
-        self._ids = range(self.w.n)
+        self._ids = list(range(self.w.n))
         self.transform = WorldToViewTransform(geo.bbox,w,h)
         self.selection = None
     def onMouse(self, evt):
@@ -61,7 +61,7 @@ class WeightsMap(wx.Panel):
             else:
                 self.set_selection(None)
         else:
-            print self.locator.nearest((X,Y))
+            print(self.locator.nearest((X,Y)))
     def onSize(self, evt):
         w,h = self.GetSize()
         self.buffer = wx.EmptyBitmapRGBA(w,h,alpha=self.trns)
@@ -84,7 +84,7 @@ class WeightsMap(wx.Panel):
         geo = self.geo
         pth = gc.CreatePath()
         if not ids:
-            ids = xrange(len(geo))
+            ids = range(len(geo))
         for i in ids:
             poly = geo.get(i)
             parts = poly.parts
@@ -134,13 +134,13 @@ class WeightsMap(wx.Panel):
             w,h = self.transform.pixel_size
             buff = self.buffer.GetSubBitmap((0,0,w,h))
             id = self.w.id_order[sel]
-            neighbors = map(self.w.id_order.index,self.w.neighbors[id])
+            neighbors = list(map(self.w.id_order.index,self.w.neighbors[id]))
             self.draw_shps(buff, NEIGHBORS_COLOR, neighbors)
             if sel in neighbors:
                 self.draw_shps(buff, SELECTION_COLOR, [sel], wx.CROSSDIAG_HATCH)
             else:
                 self.draw_shps(buff, SELECTION_COLOR, [sel])
-            print sel,":",neighbors
+            print(sel,":",neighbors)
             cdc.DrawBitmap(buff,0,0)
             stat0 = "Selection:%s"%id
             stat1 = "Neighbors:%s"%(','.join(map(str,self.w.neighbors[id])))

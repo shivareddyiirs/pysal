@@ -9,7 +9,7 @@ __author__ = "Serge Rey <srey@asu.edu>, David Folch <dfolch@fsu.edu>"
 
 
 import pysal
-from components import check_contiguity
+from .components import check_contiguity
 import copy
 import numpy as np
 from pysal.region import randomregion as RR
@@ -127,7 +127,7 @@ class Maxp:
                     val = self.objective_function()
                     self.initial_wss.append(val)
                     if self.verbose:
-                        print 'initial solution: ', i, val, best_val
+                        print('initial solution: ', i, val, best_val)
                     if val < best_val:
                         self.current_regions = copy.copy(self.regions)
                         self.current_area2region = copy.copy(self.area2region)
@@ -137,7 +137,7 @@ class Maxp:
             self.p = len(self.regions)
             self.area2region = self.current_area2region
             if verbose:
-                print "smallest region ifs: ", min([len(region) for region in self.regions])
+                print("smallest region ifs: ", min([len(region) for region in self.regions]))
                 raw_input='wait'
 
             self.swap()
@@ -232,7 +232,7 @@ class Maxp:
                 self.p = len(regions)
             else:
                 if attempts == MAX_ATTEMPTS:
-                    print 'No initial solution found'
+                    print('No initial solution found')
                     self.p = 0
                 attempts += 1
 
@@ -240,11 +240,11 @@ class Maxp:
         swapping = True
         swap_iteration = 0
         if self.verbose:
-            print 'Initial solution, objective function: ', self.objective_function()
+            print('Initial solution, objective function: ', self.objective_function())
         total_moves = 0
         self.k = len(self.regions)
         changed_regions = [1] * self.k
-        nr = range(self.k)
+        nr = list(range(self.k))
         while swapping:
             moves_made = 0
             regionIds = [r for r in nr if changed_regions[r]]
@@ -311,21 +311,21 @@ class Maxp:
                             local_swapping = False
                     local_attempts += 1
                     if self.verbose:
-                        print 'swap_iteration: ', swap_iteration, 'moves_made: ', moves_made
-                        print 'number of regions: ', len(self.regions)
-                        print 'number of changed regions: ', sum(
-                            changed_regions)
-                        print 'internal region: ', seed, 'local_attempts: ', local_attempts
-                        print 'objective function: ', self.objective_function()
-                        print 'smallest region size: ',min([len(region) for region in self.regions])
+                        print('swap_iteration: ', swap_iteration, 'moves_made: ', moves_made)
+                        print('number of regions: ', len(self.regions))
+                        print('number of changed regions: ', sum(
+                            changed_regions))
+                        print('internal region: ', seed, 'local_attempts: ', local_attempts)
+                        print('objective function: ', self.objective_function())
+                        print('smallest region size: ',min([len(region) for region in self.regions]))
             total_moves += moves_made
             if moves_made == 0:
                 swapping = False
                 self.swap_iterations = swap_iteration
                 self.total_moves = total_moves
             if self.verbose:
-                print 'moves_made: ', moves_made
-                print 'objective function: ', self.objective_function()
+                print('moves_made: ', moves_made)
+                print('objective function: ', self.objective_function())
 
     def check_floor(self, region):
         selectionIDs = [self.w.id_order.index(i) for i in region]
@@ -568,7 +568,7 @@ class Maxp_LISA(Maxp):
 
         lis = pysal.Moran_Local(y, w)
         ids = np.argsort(lis.Is)
-        ids = ids[range(w.n - 1, -1, -1)]
+        ids = ids[list(range(w.n - 1, -1, -1))]
         ids = ids.tolist()
         mp = Maxp.__init__(
             self, w, z, floor=floor, floor_variable=floor_variable,

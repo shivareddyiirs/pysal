@@ -33,13 +33,13 @@ def dist_weights(distfile, weight_type, ids, cutoff, inverse=False):
     try:
         data_csv = csv.reader(open(distfile))        
         if csv.Sniffer().has_header(distfile):
-            data_csv.next()
+            next(data_csv)
     except:        
         data_csv = None
     
     if weight_type == 'threshold':
         def neighbor_func(dists, threshold):
-            dists = filter(lambda x: x[0] <= threshold, dists)
+            dists = [x for x in dists if x[0] <= threshold]
             return dists
     else:
         def neighbor_func(dists, k):
@@ -62,9 +62,9 @@ def dist_weights(distfile, weight_type, ids, cutoff, inverse=False):
     neighbors, weights = {}, {}
     for id_val in ids:
         if id_val not in dist_src:
-            raise ValueError, 'An ID value doest not exist in distance file'
+            raise ValueError('An ID value doest not exist in distance file')
         else:
-            dists = zip(dist_src[id_val].values(), dist_src[id_val].keys())
+            dists = list(zip(list(dist_src[id_val].values()), list(dist_src[id_val].keys())))
         ngh, wgt = [], []
         if len(dists) > 0:
             nghs = neighbor_func(dists, cutoff)

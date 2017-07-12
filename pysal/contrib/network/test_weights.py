@@ -1,13 +1,13 @@
 """network unittest"""
 import unittest
-import network as pynet
+from . import network as pynet
 import numpy as np
-import weights 
+from . import weights 
 
 class Weights_Tester(unittest.TestCase):
 
     def test_dist_weights(self):
-        ids = np.array(map(str,range(1,9)))
+        ids = np.array(list(map(str,list(range(1,9)))))
         w = weights.dist_weights('distances.csv','knn',ids,3)
         self.assertEqual(w.neighbors['1'],['6','8','7'])
 

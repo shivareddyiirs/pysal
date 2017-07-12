@@ -31,7 +31,7 @@ _readers = {'read_shapefile':pdio.read_files,
             'read_fiona':fiona}
 _writers = {'to_shapefile':pdio.write_files}
 
-_pandas_readers = {k:v for k,v in pd.io.api.__dict__.items() if k.startswith('read_')}
+_pandas_readers = {k:v for k,v in list(pd.io.api.__dict__.items()) if k.startswith('read_')}
 
 readers = Namespace()
 readers.__dict__.update(_readers)

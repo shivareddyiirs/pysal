@@ -43,7 +43,7 @@ class Test_sqlite_reader(ut.TestCase):
 
     def test_deserialize(self):
         db = ps.open('sqlite:///test.db')
-        self.assertEqual(db.tables, [u'newhaven'])
+        self.assertEqual(db.tables, ['newhaven'])
 
         gj = db._get_gjson('newhaven')
         self.assertFalse(True)

@@ -6,7 +6,7 @@ class Example_Tester(unittest.TestCase):
     def test_get_path(self):
         pathparts = ex.get_path('').split('/')
         self.localpath = '/'.join(pathparts[-3:])
-        self.assertEquals(self.localpath, 'pysal/examples/')
+        self.assertEqual(self.localpath, 'pysal/examples/')
 
     def test_parser(self):
         for example in ex.available():

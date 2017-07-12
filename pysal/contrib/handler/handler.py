@@ -1,5 +1,5 @@
 import copy
-from registry import user as mr, clstypes 
+from .registry import user as mr, clstypes 
 from pysal.weights import W
 try:
     import patsy as p
@@ -76,7 +76,7 @@ class Model(object):
             data = kwargs.pop('data')
             matrices, names = pandashandler(formula, data)
             kwargs.update(names)
-        elif 'formula' in kwargs.keys() and 'data' in kwargs.keys():
+        elif 'formula' in list(kwargs.keys()) and 'data' in list(kwargs.keys()):
             formula = kwargs.pop('formula')
             data = kwargs.pop('data')
             matrices, names = pandashandler(formula, data)

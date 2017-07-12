@@ -22,7 +22,7 @@ def coverage(dists, bandwidth):
     Takes a list of numeric distances and a numeric bandwidth and returns the 
     number of distances less than or equal to the bandwidth.
     """
-    return len(filter(lambda d: d <= bandwidth, dists))
+    return len([d for d in dists if d <= bandwidth])
 
 def equity(dists):
     """
@@ -42,7 +42,7 @@ def potential_gravity(dists, power=2):
     Takes a list of numeric distances and returns the sum of the values
     of a function of a distances. The function is 1/(d^power).
     """
-    return sum([1.0/(d**power) for d in filter(lambda d: d > 0, dists)])
+    return sum([1.0/(d**power) for d in [d for d in dists if d > 0]])
 
 def travel_cost(dists):
     """

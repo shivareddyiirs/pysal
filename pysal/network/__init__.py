@@ -4,4 +4,4 @@
 
 """
 
-import network
+from . import network

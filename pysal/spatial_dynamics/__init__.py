@@ -4,7 +4,7 @@
 
 """
 
-from markov import *
-from rank import *
-from directional import *
-from interaction import *
+from .markov import *
+from .rank import *
+from .directional import *
+from .interaction import *

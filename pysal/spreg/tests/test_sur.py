@@ -8,7 +8,7 @@ from pysal.common import RTOL
 PEGP = pysal.examples.get_path
 
 def dict_compare(actual, desired, rtol):
-    for i in actual.keys():
+    for i in list(actual.keys()):
         np.testing.assert_allclose(actual[i],desired[i],rtol)
 
 

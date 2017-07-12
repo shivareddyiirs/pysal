@@ -1,7 +1,7 @@
 """network unittest"""
 import unittest
-import network as pynet
-import kernel as pykernel
+from . import network as pynet
+from . import kernel as pykernel
 
 class Kernel_Tester(unittest.TestCase):
 
@@ -29,7 +29,7 @@ class Kernel_Tester(unittest.TestCase):
         self.assertEqual(previous_nodes, prev_nodes)
 
     def test_kernel_density(self):
-        density = pykernel.kernel_density(self.G_meshed, self.proj_points, 0.3, self.G.keys())
+        density = pykernel.kernel_density(self.G_meshed, self.proj_points, 0.3, list(self.G.keys()))
         self.assertEqual(density[(4.0, 4.0)], 0.25)
 
 

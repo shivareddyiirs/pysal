@@ -16,7 +16,7 @@ __author__ = "Charles R Schmidt <schmidtc@gmail.com>"
 
 from struct import calcsize, unpack, pack
 
-from itertools import izip, islice
+from itertools import islice
 import array
 import sys
 
@@ -25,7 +25,7 @@ PY3 = int(sys.version[0]) > 2
 if PY3:
     import io
 else:
-    from cStringIO import StringIO
+    from io import StringIO
 
 if sys.byteorder == 'little':
     SYS_BYTE_ORDER = '<'
@@ -321,7 +321,7 @@ class shp_file:
     def type(self):
         return self.shape.String_Type
 
-    def next(self):
+    def __next__(self):
         """returns the next Shape in the shapeFile
 
         Example:
@@ -465,7 +465,7 @@ class shx_file:
         fmt = '>%di' % (2 * numRecords)
         size = calcsize(fmt)
         dat = unpack(fmt, self.fileObj.read(size))
-        self.index = [(dat[i] * 2, dat[i + 1] * 2) for i in xrange(
+        self.index = [(dat[i] * 2, dat[i + 1] * 2) for i in range(
             0, len(dat), 2)]
 
     def _create_shx_file(self):
@@ -634,7 +634,7 @@ class PolyLine:
         #record['Vertices'] = [(record['Vertices'][i],record['Vertices'][i+1]) for i in xrange(0,record['NumPoints']*2,2)]
         verts = record['Vertices']
         #Next line is equivalent to: zip(verts[::2],verts[1::2])
-        record['Vertices'] = list(izip(
+        record['Vertices'] = list(zip(
             islice(verts, 0, None, 2), islice(verts, 1, None, 2)))
         if not record['Parts Index']:
             record['Parts Index'] = [0]
@@ -683,7 +683,7 @@ class PolyLineZ(object):
                          ('Marray', ('d', record['NumPoints']), '<'),)
         _unpackDict2(record, contentStruct, dat)
         verts = record['Vertices']
-        record['Vertices'] = list(izip(
+        record['Vertices'] = list(zip(
             islice(verts, 0, None, 2), islice(verts, 1, None, 2)))
         if not record['Parts Index']:
             record['Parts Index'] = [0]

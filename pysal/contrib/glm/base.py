@@ -1,8 +1,8 @@
 
-from __future__ import print_function
+
 import numpy as np
 from scipy import stats
-from utils import cache_readonly
+from .utils import cache_readonly
 
 class Results(object):
     """

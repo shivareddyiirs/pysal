@@ -14,8 +14,8 @@ Andrew.Winslow@asu.edu
 import operator
 import unittest
 import test
-import priordict as priordict
-import network as pynet
+from . import priordict as priordict
+from . import network as pynet
 from math import exp, sqrt, pi
 import time
 

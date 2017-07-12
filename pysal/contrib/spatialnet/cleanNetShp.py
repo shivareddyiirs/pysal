@@ -55,7 +55,7 @@ def snap_verts(shp,tolerance=0.001,arc=True):
     for rec in shp:
         vrts = rec.vertices
         n = len(vrts)
-        nrec = pysal.cg.Chain(map(tuple,data2[pos:pos+n]))
+        nrec = pysal.cg.Chain(list(map(tuple,data2[pos:pos+n])))
         pos+=n
         yield nrec
     
@@ -80,7 +80,7 @@ def find_nodes(shp):
             node_count[node] += 1
         node_count[vrts[0]] += 1
         node_count[vrts[-1]] += 1
-    return set([node for node,c in node_count.iteritems() if c > 1])
+    return set([node for node,c in node_count.items() if c > 1])
 
 def split_at_nodes(shp):
     """
@@ -134,7 +134,7 @@ def createSpatialNetworkShapefile(inshp,outshp):
         odb.write(rec)
     o.close()
     odb.close()
-    print "Split %d roads in %d network edges"%(len(shp),len(new))
+    print("Split %d roads in %d network edges"%(len(shp),len(new)))
 
 if __name__=='__main__':
     createSpatialNetworkShapefile('beth_roads.shp','beth_network.shp')

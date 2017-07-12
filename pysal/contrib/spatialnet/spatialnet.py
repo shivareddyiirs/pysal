@@ -24,16 +24,16 @@ class SpatialNetwork(object):
     
     """
     def __init__(self,shapefile,distance_metric=EUCLIDEAN_DISTANCE):
-        if issubclass(type(shapefile),basestring): #Path
+        if issubclass(type(shapefile),str): #Path
             self.shp = shp = pysal.open(shapefile,'r')
         else:
-            raise TypeError,"Expecting a string, shapefile should the path to shapefile"
+            raise TypeError("Expecting a string, shapefile should the path to shapefile")
         if shp.type != pysal.cg.shapes.Chain:
-            raise ValueError,"Shapefile must contain polyline features"
+            raise ValueError("Shapefile must contain polyline features")
         self.dbf = dbf = pysal.open(shapefile[:-4]+'.dbf','r')
         header = dbf.header
         if (('FNODE' not in header) or ('TNODE' not in header) or ('ONEWAY' not in header)):
-            raise ValueError,"DBF must contain: FNODE,TNODE,ONEWAY"
+            raise ValueError("DBF must contain: FNODE,TNODE,ONEWAY")
         
         oneway = [{'F':False,'T':True}[x] for x in dbf.by_col('ONEWAY')]
         fnode = dbf.by_col('FNODE')
@@ -43,7 +43,7 @@ class SpatialNetwork(object):
         elif distance_metric == ARC_DISTANCE:
             lengths = [x.arclen for x in shp]
         else:
-            raise ValueError,"distance_metric must be either EUCLIDEAN_DISTANCE or ARC_DISTANCE"
+            raise ValueError("distance_metric must be either EUCLIDEAN_DISTANCE or ARC_DISTANCE")
         self.lengths = lengths
         if any(oneway):
             G = networkx.MultiDiGraph()
@@ -90,7 +90,7 @@ if __name__=='__main__':
     minX,minY,maxX,maxY = net.shp.bbox
     xRange = maxX-minX
     yRange = maxY-minY
-    qpts = [(random.random(), random.random()) for i in xrange(n)]
+    qpts = [(random.random(), random.random()) for i in range(n)]
     qpts = [pysal.cg.Point((minX+(xRange*x),minY+(yRange*y))) for x,y in qpts]
     o = pysal.open('random_qpts.shp','w')
     for p in qpts:

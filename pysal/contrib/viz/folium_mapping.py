@@ -5,6 +5,7 @@ import pandas as pd
 import geojson as gj
 import os as os
 from IPython.display import HTML
+import collections
 
 def build_features(shp, dbf):
     '''
@@ -170,7 +171,7 @@ def choropleth_map(jsonpath, key, attribute, df = None,
     
     #centroid search
     if centroid == None:
-        if 'bbox' in sjson.keys():
+        if 'bbox' in list(sjson.keys()):
             bbox = sjson.bbox
         bbox = bboxsearch(sjson)
         xs = sum([bbox[0], bbox[2]])/2.
@@ -186,7 +187,7 @@ def choropleth_map(jsonpath, key, attribute, df = None,
             y = np.array(df[attribute]/std)
         elif type(std) == str:
             y = np.array(df[attribute]/df[std])
-        elif callable(std):
+        elif isinstance(std, collections.Callable):
             raise NotImplementedError('Functional Standardizations are not implemented yet')
         else:
             raise ValueError('Standardization must be integer, float, function, or Series')
@@ -228,7 +229,7 @@ def choropleth_map(jsonpath, key, attribute, df = None,
         elif classification == 'Standard Deviation':
             if bins == None:
                 l = classes / 2
-                bins = range(-l, l+1)
+                bins = list(range(-l, l+1))
                 mapclass = list(ps.Std_Mean(y, bins).bins)
             else:
                 mapclass = list(ps.Std_Mean(y, bins).bins)

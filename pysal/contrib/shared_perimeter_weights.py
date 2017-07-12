@@ -17,7 +17,7 @@ import shapely.geometry
 
 def spw_from_shapefile(shapefile, idVariable=None):
     polygons = pysal.open(shapefile,'r').read()
-    polygons = map(shapely.geometry.asShape,polygons)
+    polygons = list(map(shapely.geometry.asShape,polygons))
     perimeters = [p.length for p in polygons]
     Wsrc = pysal.rook_from_shapefile(shapefile)
     new_weights = {}
